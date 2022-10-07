@@ -1,2 +1,4 @@
 # java-explore-with-me
-Template repository for ExploreWithMe project.
+ExploreWithMe project
+
+PULL REQUEST https://github.com/aitski/ExploreWithMe/pull/1
