@@ -1,0 +1,38 @@
+version: '3.8'
+services:
+  statistics:
+    build: ./statistics
+    ports:
+      - "9090:9090"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://dbStats:5432/ExploreWithMeStats
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+    depends_on:
+      - dbStats
+  dbStats:
+    image: postgres
+    ports:
+      - "6541:5432"
+    environment:
+      - POSTGRES_DB=ExploreWithMeStats
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+  server:
+    build: ./server
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/ExploreWithMe
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+    depends_on:
+      - db
+  db:
+    image: postgres
+    ports:
+      - "6542:5432"
+    environment:
+      - POSTGRES_DB=ExploreWithMe
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
