@@ -10,11 +10,16 @@ import java.time.LocalDateTime;
 
 public interface EventRepository extends JpaRepository<Event, Long> {
 
-    Page<Event> findAllByDateOfEventIsAfterAndDateOfEventIsBeforeAndState (
+    Page<Event> findAllByDateOfEventIsAfterAndDateOfEventIsBeforeAndState(
             LocalDateTime start, LocalDateTime end, State state, Pageable pageable);
+
+    Page<Event> findAllByDateOfEventIsAfterAndState(
+            LocalDateTime start, State state, Pageable pageable);
+
     Page<Event> findAllByInitiatorId(long userId, Pageable pageable);
 
     Page<Event> findAllByDateOfEventIsAfterAndDateOfEventIsBefore(
             LocalDateTime start, LocalDateTime end, Pageable pageable);
 
+    Page<Event> findAllByDateOfEventIsAfter(LocalDateTime start, Pageable pageable);
 }
