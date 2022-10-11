@@ -65,16 +65,6 @@ public class EventServiceImpl implements EventService {
         LocalDateTime end;
         Sort srt = null;
 
-        //если в запросе не указан диапазон дат [rangeStart-rangeEnd],
-        // то нужно выгружать события, которые произойдут позже текущей даты и времени
-        if (rangeEnd == null || rangeStart == null) {
-            start = LocalDateTime.now();
-            end = LocalDateTime.MAX;
-        } else {
-            start = LocalDateTime.parse(rangeStart, formatter);
-            end = LocalDateTime.parse(rangeEnd, formatter);
-        }
-
         switch (sortEnum) {
             case EVENT_DATE:
                 srt = Sort.by(Sort.Direction.DESC, "dateOfEvent");
@@ -85,9 +75,19 @@ public class EventServiceImpl implements EventService {
         }
         Pageable pageRequest = PageRequest.of(from / size, size, srt);
 
+        //если в запросе не указан диапазон дат [rangeStart-rangeEnd],
+        // то нужно выгружать события, которые произойдут позже текущей даты и времени
         //в выдаче должны быть только опубликованные события State "PUBLISHED"
-        list = eventRepository.findAllByDateOfEventIsAfterAndDateOfEventIsBeforeAndState(
-                start, end, PUBLISHED, pageRequest).getContent();
+        if (rangeEnd == null || rangeStart == null) {
+            start = LocalDateTime.now();
+            list = eventRepository.findAllByDateOfEventIsAfterAndState(
+                    start, PUBLISHED, pageRequest).getContent();
+        } else {
+            start = LocalDateTime.parse(rangeStart, formatter);
+            end = LocalDateTime.parse(rangeEnd, formatter);
+            list = eventRepository.findAllByDateOfEventIsAfterAndDateOfEventIsBeforeAndState(
+                    start, end, PUBLISHED, pageRequest).getContent();
+        }
 
         if (onlyAvailable) {
             list = list.stream().filter(
@@ -100,7 +100,7 @@ public class EventServiceImpl implements EventService {
                     .collect(Collectors.toList());
         }
 
-        if (categories.length != 0) {
+        if (categories != null) {
             List<Long> cat = Arrays.asList(categories);
             list = list.stream().filter(
                             event -> cat.contains(event.getCategory().getId()))
@@ -228,37 +228,36 @@ public class EventServiceImpl implements EventService {
         List<Event> list;
         LocalDateTime start;
         LocalDateTime end;
+        Pageable pageRequest = PageRequest.of(from / size, size);
 
         //если в запросе не указан диапазон дат [rangeStart-rangeEnd],
         // то нужно выгружать события, которые произойдут позже текущей даты и времени
         if (rangeEnd == null || rangeStart == null) {
             start = LocalDateTime.now();
-            end = LocalDateTime.MAX;
+            list = eventRepository.findAllByDateOfEventIsAfter(
+                    start, pageRequest).getContent();
         } else {
             start = LocalDateTime.parse(rangeStart, formatter);
             end = LocalDateTime.parse(rangeEnd, formatter);
+            list = eventRepository.findAllByDateOfEventIsAfterAndDateOfEventIsBefore(
+                    start, end, pageRequest).getContent();
         }
 
-        Pageable pageRequest = PageRequest.of(from / size, size);
-
-        list = eventRepository.findAllByDateOfEventIsAfterAndDateOfEventIsBefore(
-                start, end, pageRequest).getContent();
-
-        if (users.length != 0) {
+        if (users != null) {
             List<Long> us = Arrays.asList(users);
             list = list.stream().filter(
                             event -> us.contains(event.getInitiator().getId()))
                     .collect(Collectors.toList());
         }
 
-        if (states.length != 0) {
+        if (states != null) {
             List<String> st = Arrays.asList(states);
             list = list.stream().filter(
                             event -> st.contains(event.getState().name()))
                     .collect(Collectors.toList());
         }
 
-        if (categories.length != 0) {
+        if (categories != null) {
             List<Long> cat = Arrays.asList(categories);
             list = list.stream().filter(
                             event -> cat.contains(event.getCategory().getId()))
