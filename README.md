@@ -19,9 +19,9 @@ Statistics diagram
 ![Diagram](/statistics.png)
 
 Server has 3 levels of privacy:
-1) Public
-2) Private
-3) Admin
+1) Public - view events and comments
+2) Private - create events, request participation, comment events
+3) Admin - create categories, approve/reject events, delete comments
 
 Links to complete information about API (open in editor.swagger.io):
 
