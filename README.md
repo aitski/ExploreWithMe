@@ -3,6 +3,7 @@ ExploreWithMe project
 PULL REQUEST https://github.com/aitski/ExploreWithMe/pull/1
 
 Application Exlpore With Me helps to share information about events, request participation and comment.
+
 Tools applied: Spring Boot, Hibernate, PostreSQL, Docker compose
 
 It consists of 2 micro-services:
