@@ -1,10 +1,9 @@
 # java-explore-with-me
 ExploreWithMe project
-PULL REQUEST https://github.com/aitski/ExploreWithMe/pull/1
 
-Application Exlpore With Me helps to share information about events, request participation and comment.
+Application Explore With Me helps to share information about events, request participation and comment.
 
-Tools applied: Spring Boot, Hibernate, PostreSQL, Docker compose
+Tools applied: Spring Boot, Hibernate, PostgreSQL, Docker compose
 
 It consists of 2 micro-services:
 1) Server - includes all necessary logic for the application
