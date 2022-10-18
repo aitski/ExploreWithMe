@@ -1,5 +1,4 @@
-# java-explore-with-me
-ExploreWithMe project
+# ExploreWithMe project
 
 Application Explore With Me helps to share information about events, request participation and comment.
 
